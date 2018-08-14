@@ -1,4 +1,4 @@
-package com.my.blog.website;
+/*package com.my.blog.website;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,10 +13,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.Random;
 import java.util.concurrent.Future;
 
-/**
+*//**
  * 测试异步调用
  * Created by Administrator on 2017/3/6 006.
- */
+ *//*
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @EnableAsync
@@ -83,3 +83,4 @@ class Task{
         return new AsyncResult<>("任务三OK");
     }
 }
+*/

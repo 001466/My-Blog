@@ -1,35 +1,48 @@
 package com.my.blog.website.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.my.blog.website.dao.AttachVoMapper;
-import com.my.blog.website.dto.MetaDto;
-import com.my.blog.website.exception.TipException;
-import com.my.blog.website.model.Bo.ArchiveBo;
-import com.my.blog.website.model.Vo.*;
-import com.my.blog.website.service.ISiteService;
-import com.my.blog.website.utils.DateKit;
-import com.my.blog.website.utils.TaleUtils;
-import com.my.blog.website.utils.backup.Backup;
-import com.my.blog.website.constant.WebConst;
-import com.my.blog.website.controller.admin.AttachController;
-import com.my.blog.website.dao.CommentVoMapper;
-import com.my.blog.website.dao.ContentVoMapper;
-import com.my.blog.website.dao.MetaVoMapper;
-import com.my.blog.website.dto.Types;
-import com.my.blog.website.model.Bo.BackResponseBo;
-import com.my.blog.website.model.Bo.StatisticsBo;
-import com.my.blog.website.utils.ZipUtils;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import javax.annotation.Resource;
+import javax.sql.DataSource;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.*;
+import com.github.pagehelper.PageHelper;
+import com.my.blog.website.constant.WebConst;
+import com.my.blog.website.controller.admin.AttachController;
+import com.my.blog.website.dao.AttachVoMapper;
+import com.my.blog.website.dao.CommentVoMapper;
+import com.my.blog.website.dao.ContentVoMapper;
+import com.my.blog.website.dao.MetaVoMapper;
+import com.my.blog.website.dto.MetaDto;
+import com.my.blog.website.dto.Types;
+import com.my.blog.website.exception.TipException;
+import com.my.blog.website.model.Bo.ArchiveBo;
+import com.my.blog.website.model.Bo.BackResponseBo;
+import com.my.blog.website.model.Bo.StatisticsBo;
+import com.my.blog.website.model.Vo.AttachVoExample;
+import com.my.blog.website.model.Vo.CommentVo;
+import com.my.blog.website.model.Vo.CommentVoExample;
+import com.my.blog.website.model.Vo.ContentVo;
+import com.my.blog.website.model.Vo.ContentVoExample;
+import com.my.blog.website.model.Vo.MetaVoExample;
+import com.my.blog.website.service.ISiteService;
+import com.my.blog.website.utils.DateKit;
+import com.my.blog.website.utils.TaleUtils;
+import com.my.blog.website.utils.ZipUtils;
+import com.my.blog.website.utils.backup.Backup;
 
 /**
  * Created by BlueT on 2017/3/7.
@@ -50,6 +63,9 @@ public class SiteServiceImpl implements ISiteService {
 
     @Resource
     private MetaVoMapper metaDao;
+    
+    @Resource
+    private DataSource dataSource;
 
     @Override
     public List<CommentVo> recentComments(int limit) {
@@ -116,7 +132,7 @@ public class SiteServiceImpl implements ISiteService {
             String sqlFileName = "tale_" + DateKit.dateFormat(new Date(), fmt) + "_" + TaleUtils.getRandomNumber(5) + ".sql";
             String zipFile = sqlFileName.replace(".sql", ".zip");
 
-            Backup backup = new Backup(TaleUtils.getNewDataSource().getConnection());
+            Backup backup = new Backup(dataSource.getConnection());
             String sqlContent = backup.execute();
 
             File sqlFile = new File(bkAttachDir + sqlFileName);
@@ -124,7 +140,6 @@ public class SiteServiceImpl implements ISiteService {
 
             String zip = bkAttachDir + zipFile;
             ZipUtils.zipFile(sqlFile.getPath(), zip);
-
             if (!sqlFile.exists()) {
                 throw new TipException("数据库备份失败");
             }
@@ -133,12 +148,12 @@ public class SiteServiceImpl implements ISiteService {
             backResponse.setSqlPath(zipFile);
 
             // 10秒后删除备份文件
-            new Timer().schedule(new TimerTask() {
+           /* new Timer().schedule(new TimerTask() {
                 @Override
                 public void run() {
                     new File(zip).delete();
                 }
-            }, 10 * 1000);
+            }, 10 * 1000);*/
         }
         return backResponse;
     }

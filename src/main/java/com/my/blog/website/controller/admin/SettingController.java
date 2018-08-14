@@ -70,14 +70,15 @@ public class SettingController extends BaseController {
                 querys.put(key, join(value));
             });
             optionService.saveOptions(querys);
-            WebConst.initConfig = querys;
+            
+            WebConst.initConfig.putAll(querys);
             if (StringUtils.isNotBlank(site_theme)) {
                 BaseController.THEME = "themes/" + site_theme;
             }
             logService.insertLog(LogActions.SYS_SETTING.getAction(), GsonUtils.toJsonString(querys), request.getRemoteAddr(), this.getUid(request));
             return RestResponseBo.ok();
         } catch (Exception e) {
-            String msg = "保存设置失败";
+            String msg = "保存设置失败"+e.getMessage();
             return RestResponseBo.fail(msg);
         }
     }
@@ -100,7 +101,7 @@ public class SettingController extends BaseController {
             logService.insertLog(LogActions.SYS_BACKUP.getAction(), null, request.getRemoteAddr(), this.getUid(request));
             return RestResponseBo.ok(backResponse);
         } catch (Exception e) {
-            String msg = "备份失败";
+            String msg = "备份失败"+e.getMessage();
             if (e instanceof TipException) {
                 msg = e.getMessage();
             } else {

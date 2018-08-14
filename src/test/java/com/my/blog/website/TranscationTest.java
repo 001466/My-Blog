@@ -1,4 +1,4 @@
-package com.my.blog.website;
+/*package com.my.blog.website;
 
 import com.my.blog.website.exception.TipException;
 import com.my.blog.website.model.Vo.UserVo;
@@ -13,10 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
-/**
+*//**
  * 测试数据库事务
  * Created by BlueT on 2017/3/8.
- */
+ *//*
 @MapperScan("com.my.blog.website.dao")
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -40,3 +40,4 @@ public class TranscationTest {
         optionService.insertOption("site_keywords", "qwqwq");
     }
 }
+*/

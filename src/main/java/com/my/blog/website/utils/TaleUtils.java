@@ -123,7 +123,7 @@ public class TaleUtils {
      *
      * @return
      */
-    public static DataSource getNewDataSource() {
+    /*public static DataSource getNewDataSource() {
         if (newDataSource == null) synchronized (TaleUtils.class) {
             if (newDataSource == null) {
                 Properties properties = TaleUtils.getPropFromFile("application-default.properties");
@@ -134,13 +134,14 @@ public class TaleUtils {
                 managerDataSource.setDriverClassName("com.mysql.jdbc.Driver");
                 managerDataSource.setPassword(properties.getProperty("spring.datasource.password"));
                 String str = "jdbc:mysql://" + properties.getProperty("spring.datasource.url") + "/" + properties.getProperty("spring.datasource.dbname") + "?useUnicode=true&characterEncoding=utf-8&useSSL=false";
+                System.err.println("getNewDataSource:"+str);
                 managerDataSource.setUrl(str);
                 managerDataSource.setUsername(properties.getProperty("spring.datasource.username"));
                 newDataSource = managerDataSource;
             }
         }
         return newDataSource;
-    }
+    }*/
 
     /**
      * 返回当前登录用户

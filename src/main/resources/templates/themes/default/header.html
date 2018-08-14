@@ -29,9 +29,20 @@
 <![endif]-->
 <header id="header" class="header bg-white">
     <div class="navbar-container">
-        <a th:href="${commons.site_url()}" class="navbar-logo">
+       <!-- 
+		<a th:href="${commons.site_url()}" class="navbar-logo">
+        
+        	  
             <img th:src="@{/user/img/logo.png}" alt="首页"/>
+             
+             <p th:text="${commons.site_option('site_title','My Blog')}"></p>
         </a>
+         -->
+         <a href="/"  class="navbar-logo">
+        	 <div  th:text="${commons.site_option('site_title','My Blog')}"></div>
+         </a>
+         
+         
         <div class="navbar-menu">
             <a th:href="${commons.site_url('/archives')}">归档</a>
             <a th:href="${commons.site_url('/links')}">友链</a>
